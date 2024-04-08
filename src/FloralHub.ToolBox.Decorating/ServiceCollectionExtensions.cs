@@ -80,29 +80,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    //private static Type? GetImplementationType(this ServiceDescriptor descriptor)
-    //{
-    //    if (descriptor.ServiceKey == null)
-    //    {
-    //        if (descriptor.ImplementationType != null)
-    //            return descriptor.ImplementationType;
-    //        if (descriptor.ImplementationInstance != null)
-    //            return descriptor.ImplementationInstance.GetType();
-    //        if (descriptor.ImplementationFactory != null)
-    //            return descriptor.ImplementationFactory.GetType().GenericTypeArguments[1];
-    //    }
-    //    else
-    //    {
-    //        if (descriptor.KeyedImplementationType != null)
-    //            return descriptor.KeyedImplementationType;
-    //        if (descriptor.KeyedImplementationInstance != null)
-    //            return descriptor.KeyedImplementationInstance.GetType();
-    //        if (descriptor.KeyedImplementationFactory != null)
-    //            return descriptor.KeyedImplementationFactory.GetType().GenericTypeArguments[2];
-    //    }
-    //    return null;
-    //}
-
+    // TODO: Реализовать, чтобы не висел закомментированный кусок
     ///// <summary>
     ///// Декорирует сервисы, имплементирующие интерфейс <typeparamref name="TService"/> используя фабрику
     ///// </summary>
@@ -139,6 +117,7 @@ public static class ServiceCollectionExtensions
     //    return services;
     //}
 
+    // TODO: Реализовать, чтобы не висел закомментированный кусок
     ///// <summary>
     ///// Декорирует сервисы, имплементирующие интерфейс <typeparamref name="TService"/> используя переданную имплементацию
     ///// </summary>
@@ -173,6 +152,7 @@ public static class ServiceCollectionExtensions
     //    return services;
     //}
 
+    // TODO: Переписать, чтобы было удобочитаемо. Возможно вынести в какие-нибудь сервисы
     private static Func<IServiceProvider, object> CreateFactory(
         Type decoratorType,
         ServiceDescriptor currentDescriptor)
@@ -262,37 +242,6 @@ public static class ServiceCollectionExtensions
 
         throw new NotImplementedException("Нужная корректная ошибка!");
     }
-
-    //private static Func<IServiceProvider, object> CreateFactory(
-    //    Func<object, IServiceProvider, object> decoratorFactory,
-    //    ServiceDescriptor currentDescriptor)
-    //{
-    //    if (currentDescriptor.ImplementationInstance is not null)
-    //    {
-    //        return serviceProvider =>
-    //            decoratorFactory(currentDescriptor.ImplementationInstance, serviceProvider);
-    //    }
-
-    //    if (currentDescriptor.ImplementationFactory is not null)
-    //    {
-    //        return serviceProvider =>
-    //            decoratorFactory(currentDescriptor.ImplementationFactory(serviceProvider), serviceProvider);
-    //    }
-
-    //    if (currentDescriptor.ImplementationType is not null)
-    //    {
-    //        return serviceProvider =>
-    //        {
-    //            object service = ActivatorUtilities.GetServiceOrCreateInstance(
-    //                serviceProvider,
-    //                currentDescriptor.ImplementationType);
-
-    //            return decoratorFactory(service, serviceProvider);
-    //        };
-    //    }
-
-    //    throw new NotImplementedException("Нужная корректная ошибка!");
-    //}
 
     public static Func<ServiceDescriptor, bool> CreatePredicate(Type serviceType) =>
         descriptor => descriptor.ServiceType is { IsGenericType: true, IsGenericTypeDefinition: false }
