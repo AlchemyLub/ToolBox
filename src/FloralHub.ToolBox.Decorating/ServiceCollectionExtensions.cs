@@ -57,7 +57,7 @@ public static class ServiceCollectionExtensions
         Type decoratorType)
     {
         List<ServiceDescriptor> wrappedDescriptors = services
-            .Where(t => t.ServiceType == interfaceType)
+            .Where(CreatePredicate(interfaceType))
             .ToList();
 
         if (wrappedDescriptors.Count == 0)
@@ -72,13 +72,36 @@ public static class ServiceCollectionExtensions
                 wrappedDescriptor);
 
             services.Replace(ServiceDescriptor.Describe(
-                    interfaceType,
+                wrappedDescriptor.ServiceType,
                     factory,
                 wrappedDescriptor.Lifetime));
         }
 
         return services;
     }
+
+    //private static Type? GetImplementationType(this ServiceDescriptor descriptor)
+    //{
+    //    if (descriptor.ServiceKey == null)
+    //    {
+    //        if (descriptor.ImplementationType != null)
+    //            return descriptor.ImplementationType;
+    //        if (descriptor.ImplementationInstance != null)
+    //            return descriptor.ImplementationInstance.GetType();
+    //        if (descriptor.ImplementationFactory != null)
+    //            return descriptor.ImplementationFactory.GetType().GenericTypeArguments[1];
+    //    }
+    //    else
+    //    {
+    //        if (descriptor.KeyedImplementationType != null)
+    //            return descriptor.KeyedImplementationType;
+    //        if (descriptor.KeyedImplementationInstance != null)
+    //            return descriptor.KeyedImplementationInstance.GetType();
+    //        if (descriptor.KeyedImplementationFactory != null)
+    //            return descriptor.KeyedImplementationFactory.GetType().GenericTypeArguments[2];
+    //    }
+    //    return null;
+    //}
 
     ///// <summary>
     ///// Декорирует сервисы, имплементирующие интерфейс <typeparamref name="TService"/> используя фабрику
@@ -156,17 +179,6 @@ public static class ServiceCollectionExtensions
     {
         if (currentDescriptor.ImplementationInstance is not null)
         {
-            if (currentDescriptor.ServiceType.IsGenericTypeDefinition)
-            {
-                Type[] genericArguments = currentDescriptor.ServiceType.GetGenericArguments();
-                Type closedDecorator = decoratorType.MakeGenericType(genericArguments);
-
-                return serviceProvider => ActivatorUtilities.CreateInstance(
-                    serviceProvider,
-                    closedDecorator,
-                    currentDescriptor.ImplementationInstance);
-            }
-
             return serviceProvider => ActivatorUtilities.CreateInstance(
                 serviceProvider,
                 decoratorType,
@@ -181,9 +193,26 @@ public static class ServiceCollectionExtensions
                 currentDescriptor.ImplementationFactory(serviceProvider));
         }
 
-        // TODO: Тут надо сделать IF для дженерика.
         if (currentDescriptor.ImplementationType is not null)
         {
+            if (decoratorType.IsGenericTypeDefinition)
+            {
+                return serviceProvider =>
+                {
+                    object service = ActivatorUtilities.GetServiceOrCreateInstance(
+                        serviceProvider,
+                        currentDescriptor.ImplementationType);
+
+                    Type[] genericArguments = currentDescriptor.ServiceType.GetGenericArguments();
+                    Type closedDecorator = decoratorType.MakeGenericType(genericArguments);
+
+                    return ActivatorUtilities.CreateInstance(
+                        serviceProvider,
+                        closedDecorator,
+                        service);
+                };
+            }
+
             return serviceProvider =>
             {
                 object service = ActivatorUtilities.GetServiceOrCreateInstance(
@@ -197,39 +226,78 @@ public static class ServiceCollectionExtensions
             };
         }
 
-        throw new NotImplementedException("Нужная корректная ошибка!");
-    }
-
-    private static Func<IServiceProvider, object> CreateFactory(
-        Func<object, IServiceProvider, object> decoratorFactory,
-        ServiceDescriptor currentDescriptor)
-    {
-        if (currentDescriptor.ImplementationInstance is not null)
+        if (currentDescriptor.IsKeyedService)
         {
-            return serviceProvider =>
-                decoratorFactory(currentDescriptor.ImplementationInstance, serviceProvider);
-        }
-
-        if (currentDescriptor.ImplementationFactory is not null)
-        {
-            return serviceProvider =>
-                decoratorFactory(currentDescriptor.ImplementationFactory(serviceProvider), serviceProvider);
-        }
-
-        if (currentDescriptor.ImplementationType is not null)
-        {
-            return serviceProvider =>
+            if (currentDescriptor.KeyedImplementationInstance is not null)
             {
-                object service = ActivatorUtilities.GetServiceOrCreateInstance(
+                return serviceProvider => ActivatorUtilities.CreateInstance(
                     serviceProvider,
-                    currentDescriptor.ImplementationType);
+                    decoratorType,
+                    currentDescriptor.KeyedImplementationInstance);
+            }
 
-                return decoratorFactory(service, serviceProvider);
-            };
+            if (currentDescriptor.KeyedImplementationFactory is not null)
+            {
+                return serviceProvider => ActivatorUtilities.CreateInstance(
+                    serviceProvider,
+                    decoratorType,
+                    currentDescriptor.KeyedImplementationFactory(serviceProvider, currentDescriptor.ServiceKey));
+            }
+
+            if (currentDescriptor.KeyedImplementationType is not null)
+            {
+                return serviceProvider =>
+                {
+                    object service = ActivatorUtilities.CreateInstance(
+                        serviceProvider,
+                        currentDescriptor.KeyedImplementationType);
+
+                    return ActivatorUtilities.CreateInstance(
+                        serviceProvider,
+                        decoratorType,
+                        service);
+                };
+            }
         }
 
         throw new NotImplementedException("Нужная корректная ошибка!");
     }
+
+    //private static Func<IServiceProvider, object> CreateFactory(
+    //    Func<object, IServiceProvider, object> decoratorFactory,
+    //    ServiceDescriptor currentDescriptor)
+    //{
+    //    if (currentDescriptor.ImplementationInstance is not null)
+    //    {
+    //        return serviceProvider =>
+    //            decoratorFactory(currentDescriptor.ImplementationInstance, serviceProvider);
+    //    }
+
+    //    if (currentDescriptor.ImplementationFactory is not null)
+    //    {
+    //        return serviceProvider =>
+    //            decoratorFactory(currentDescriptor.ImplementationFactory(serviceProvider), serviceProvider);
+    //    }
+
+    //    if (currentDescriptor.ImplementationType is not null)
+    //    {
+    //        return serviceProvider =>
+    //        {
+    //            object service = ActivatorUtilities.GetServiceOrCreateInstance(
+    //                serviceProvider,
+    //                currentDescriptor.ImplementationType);
+
+    //            return decoratorFactory(service, serviceProvider);
+    //        };
+    //    }
+
+    //    throw new NotImplementedException("Нужная корректная ошибка!");
+    //}
+
+    public static Func<ServiceDescriptor, bool> CreatePredicate(Type serviceType) =>
+        descriptor => descriptor.ServiceType is { IsGenericType: true, IsGenericTypeDefinition: false }
+            ? serviceType.GetGenericTypeDefinition() == descriptor.ServiceType.GetGenericTypeDefinition()
+            : serviceType == descriptor.ServiceType;
 
     public static IServiceCollection Replace(
         this IServiceCollection collection,
