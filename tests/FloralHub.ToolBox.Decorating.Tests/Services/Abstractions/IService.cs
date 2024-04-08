@@ -15,7 +15,8 @@ internal interface IService
 /// <summary>
 /// Тестовый сервис.
 /// </summary>
-public interface IGenericService<T>
+/// <typeparam name="T">Тестовый тип</typeparam>
+internal interface IGenericService<T>
 {
     /// <summary>
     /// Получить имя сервиса
@@ -27,7 +28,9 @@ public interface IGenericService<T>
 /// <summary>
 /// Тестовый сервис.
 /// </summary>
-public interface IDoubleGenericService<T, TU>
+/// <typeparam name="T">Тестовый тип</typeparam>
+/// <typeparam name="TU">Тестовый тип</typeparam>
+internal interface IDoubleGenericService<T, TU>
 {
     /// <summary>
     /// Получить имя сервиса
@@ -35,3 +38,8 @@ public interface IDoubleGenericService<T, TU>
     /// <returns>Тестовое имя</returns>
     internal string GetName();
 }
+
+/// <summary>
+/// Тестовый сервис.
+/// </summary>
+internal interface IMultiplyService;
