@@ -121,7 +121,7 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 # Brace settings
-csharp_prefer_braces = true:silent# Prefer curly braces even for one line of 
+csharp_prefer_braces = true:silent# Prefer curly braces even for one line of
 # Expression-bodied members
 csharp_style_expression_bodied_methods = true:silent
 csharp_style_expression_bodied_accessors = true:silent
@@ -203,7 +203,7 @@ dotnet_diagnostic.SA1003.severity = none
 dotnet_diagnostic.SA1004.severity = none
 dotnet_diagnostic.SA1005.severity = none
 dotnet_diagnostic.SA1006.severity = none
-dotnet_diagnostic.SA1007.severity = none 
+dotnet_diagnostic.SA1007.severity = none
 dotnet_diagnostic.SA1008.severity = none
 dotnet_diagnostic.SA1009.severity = none
 dotnet_diagnostic.SA1010.severity = none
@@ -283,7 +283,7 @@ dotnet_diagnostic.SA1301.severity = warning
 dotnet_diagnostic.SA1302.severity = warning
 dotnet_diagnostic.SA1303.severity = warning
 dotnet_diagnostic.SA1304.severity = warning
-dotnet_diagnostic.SA1305.severity = none   
+dotnet_diagnostic.SA1305.severity = none
 dotnet_diagnostic.SA1306.severity = warning
 dotnet_diagnostic.SA1307.severity = warning
 dotnet_diagnostic.SA1308.severity = warning
