@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="FloralHub.ToolBox.Decorating.UnitTests" />
+    <InternalsVisibleTo Include="AlchemyLub.ToolBox.Decorating.UnitTests" />
   </ItemGroup>
 
 </Project>

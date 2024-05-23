@@ -1,4 +1,4 @@
-namespace FloralHub.ToolBox.Decorating;
+namespace AlchemyLub.ToolBox.Decorating;
 
 /// <summary>
 /// Методы расширения для <see cref="IServiceCollection"/>

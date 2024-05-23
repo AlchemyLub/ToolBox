@@ -1,4 +1,4 @@
-namespace FloralHub.ToolBox.Decorating.UnitTests.Services;
+namespace AlchemyLub.ToolBox.Decorating.UnitTests.Services;
 
 /// <inheritdoc cref="IService"/>
 internal sealed class Service : IService

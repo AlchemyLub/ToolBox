@@ -1,4 +1,4 @@
-namespace FloralHub.ToolBox.Decorating.Exceptions;
+namespace AlchemyLub.ToolBox.Decorating.Exceptions;
 
 /// <summary>
 /// Исключение, выбрасываемое при отсутствии зарегистрированных имплементаций сервиса

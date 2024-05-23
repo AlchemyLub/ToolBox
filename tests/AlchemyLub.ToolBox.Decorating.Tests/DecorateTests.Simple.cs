@@ -1,7 +1,7 @@
-namespace FloralHub.ToolBox.Decorating.UnitTests;
+namespace AlchemyLub.ToolBox.Decorating.UnitTests;
 
 /// <summary>
-/// Тесты для <see cref="ServiceCollectionExtensions.Decorate{TInterface, TImplemetation}"/> при декорировании простых типов
+/// Тесты для <see cref="ServiceCollectionExtensions.Decorate{TInterface,TDecorator}"/> при декорировании простых типов
 /// </summary>
 public partial class DecorateTests
 {

@@ -1,4 +1,4 @@
-namespace FloralHub.ToolBox.Exceptions;
+namespace AlchemyLub.ToolBox.Exceptions;
 
 /// <summary>
 /// Корневая модель для всех пользовательских исключений.

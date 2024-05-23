@@ -1,4 +1,4 @@
-namespace FloralHub.ToolBox.Decorating.UnitTests.Services.Abstractions;
+namespace AlchemyLub.ToolBox.Decorating.UnitTests.Services.Abstractions;
 
 /// <summary>
 /// Тестовый сервис.
