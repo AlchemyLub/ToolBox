@@ -1,4 +1,4 @@
-namespace AlchemyLub.ToolBox.Decorating.UnitTests.Services;
+namespace AlchemyLab.ToolBox.Decorating.UnitTests.Services;
 
 /// <inheritdoc cref="IService"/>
 internal sealed class AnotherService : IService

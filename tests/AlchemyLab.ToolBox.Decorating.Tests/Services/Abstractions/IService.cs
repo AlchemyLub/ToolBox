@@ -1,4 +1,4 @@
-namespace AlchemyLub.ToolBox.Decorating.UnitTests.Services.Abstractions;
+namespace AlchemyLab.ToolBox.Decorating.UnitTests.Services.Abstractions;
 
 /// <summary>
 /// Тестовый сервис.

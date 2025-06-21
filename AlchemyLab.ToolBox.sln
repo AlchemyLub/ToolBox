@@ -1,0 +1,56 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34607.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41EF9161-6F52-4F1D-BEEC-96B77494DF3A}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{92987ACC-7E45-4F26-99BD-C0536C242D5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.Common", "src\AlchemyLab.ToolBox.Common\AlchemyLab.ToolBox.Common.csproj", "{1881E002-9C2F-49B2-83D3-830F53EC78FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.Decorating.UnitTests", "tests\AlchemyLab.ToolBox.Decorating.Tests\AlchemyLab.ToolBox.Decorating.UnitTests.csproj", "{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.AspNet", "src\AlchemyLab.ToolBox.AspNet\AlchemyLab.ToolBox.AspNet.csproj", "{5A5E452F-92B3-4F88-93BF-DD9B02432444}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.Decorating", "src\AlchemyLab.ToolBox.Decorating\AlchemyLab.ToolBox.Decorating.csproj", "{38931641-20F7-4068-A947-3FD7660DD5F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1881E002-9C2F-49B2-83D3-830F53EC78FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1881E002-9C2F-49B2-83D3-830F53EC78FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1881E002-9C2F-49B2-83D3-830F53EC78FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1881E002-9C2F-49B2-83D3-830F53EC78FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A5E452F-92B3-4F88-93BF-DD9B02432444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A5E452F-92B3-4F88-93BF-DD9B02432444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A5E452F-92B3-4F88-93BF-DD9B02432444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A5E452F-92B3-4F88-93BF-DD9B02432444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38931641-20F7-4068-A947-3FD7660DD5F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38931641-20F7-4068-A947-3FD7660DD5F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38931641-20F7-4068-A947-3FD7660DD5F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38931641-20F7-4068-A947-3FD7660DD5F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F} = {92987ACC-7E45-4F26-99BD-C0536C242D5B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C1A0EED-A679-4997-A266-F3A92E5D8C2D}
+	EndGlobalSection
+EndGlobal

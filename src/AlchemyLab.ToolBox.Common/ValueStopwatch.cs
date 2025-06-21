@@ -1,10 +1,10 @@
-namespace AlchemyLub.ToolBox.Common;
+namespace AlchemyLab.ToolBox.Common;
 
 /// <summary>
 /// Структура, аналогичная <see cref="Stopwatch"/> для избежания аллокаций
 /// </summary>
 /// <remarks>
-/// Вытянуто из недр .NET: https://source.dot.net/#Microsoft.Extensions.Http/ValueStopwatch.cs
+/// Вытянуто из недр .NET <see href="https://source.dot.net/#Microsoft.Extensions.Http/ValueStopwatch.cs"/>
 /// </remarks>
 public readonly struct ValueStopwatch
 {
@@ -12,11 +12,11 @@ public readonly struct ValueStopwatch
 
     private readonly long startTimestamp;
 
-    public bool IsActive => startTimestamp != 0;
+    public bool IsActive => startTimestamp is not 0;
 
     private ValueStopwatch(long startTimestamp) => this.startTimestamp = startTimestamp;
 
-    public static ValueStopwatch StartNew() => new ValueStopwatch(Stopwatch.GetTimestamp());
+    public static ValueStopwatch StartNew() => new(Stopwatch.GetTimestamp());
 
     public TimeSpan GetElapsedTime()
     {

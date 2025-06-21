@@ -1,4 +1,4 @@
-namespace AlchemyLub.ToolBox.Decorating;
+namespace AlchemyLab.ToolBox.Decorating;
 
 /// <summary>
 /// Методы расширения для <see cref="IServiceCollection"/>
@@ -19,9 +19,7 @@ public static class ServiceCollectionExtensions
     {
         Type interfaceType = typeof(TInterface);
 
-        List<ServiceDescriptor> wrappedDescriptors = services
-            .Where(t => t.ServiceType == interfaceType)
-            .ToList();
+        List<ServiceDescriptor> wrappedDescriptors = [.. services.Where(t => t.ServiceType == interfaceType)];
 
         if (wrappedDescriptors.Count == 0)
         {
@@ -56,9 +54,7 @@ public static class ServiceCollectionExtensions
         Type interfaceType,
         Type decoratorType)
     {
-        List<ServiceDescriptor> wrappedDescriptors = services
-            .Where(CreatePredicate(interfaceType))
-            .ToList();
+        List<ServiceDescriptor> wrappedDescriptors = [.. services.Where(CreatePredicate(interfaceType))];
 
         if (wrappedDescriptors.Count == 0)
         {

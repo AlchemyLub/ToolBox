@@ -1,4 +1,4 @@
-namespace AlchemyLub.ToolBox.Decorating.UnitTests;
+namespace AlchemyLab.ToolBox.Decorating.UnitTests;
 
 /// <summary>
 /// Тесты для <see cref="ServiceCollectionExtensions.Decorate{TInterface,TDecorator}"/> при декорировании обобщённых типов
@@ -21,7 +21,7 @@ public partial class DecorateTests
         string result = service.GetName();
 
         Assert.IsType<GenericServiceDecorator<int>>(service);
-        Assert.Equal(GenericResult, result);
+        Assert.Equal(DecorateTests.GenericResult, result);
     }
 
     /// <summary>
@@ -45,7 +45,7 @@ public partial class DecorateTests
             services,
             service => Assert.IsType<GenericServiceDecorator<int>>(service));
         Assert.Equal(
-            new List<string> { GenericResult, AnotherGenericResult },
+            new List<string> { DecorateTests.GenericResult, DecorateTests.AnotherGenericResult },
             result);
     }
 
@@ -69,7 +69,7 @@ public partial class DecorateTests
         string result = service.GetName();
 
         Assert.IsType<DoubleGenericServiceDecorator<int, string>>(service);
-        Assert.Equal(DoubleGenericResult, result);
+        Assert.Equal(DecorateTests.DoubleGenericResult, result);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public partial class DecorateTests
             services,
             service => Assert.IsType<DoubleGenericServiceDecorator<int, string>>(service));
         Assert.Equal(
-            new List<string> { DoubleGenericResult, AnotherDoubleGenericResult },
+            new List<string> { DecorateTests.DoubleGenericResult, DecorateTests.AnotherDoubleGenericResult },
             result);
     }
 }

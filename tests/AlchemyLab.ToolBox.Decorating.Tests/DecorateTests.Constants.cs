@@ -1,4 +1,4 @@
-namespace AlchemyLub.ToolBox.Decorating.UnitTests;
+namespace AlchemyLab.ToolBox.Decorating.UnitTests;
 
 /// <summary>
 /// Константы для тестов на <see cref="ServiceCollectionExtensions.Decorate{TInterface,TDecorator}"/>

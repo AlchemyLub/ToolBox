@@ -2,11 +2,26 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
+    <AnalysisLevel>latest</AnalysisLevel>
     <ImplicitUsings>enable</ImplicitUsings>
-    <TargetFramework>net8.0</TargetFramework>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TargetFramework>net9.0</TargetFramework>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <InvariantGlobalization>true</InvariantGlobalization>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.*" />
+  </ItemGroup>
 
 </Project>

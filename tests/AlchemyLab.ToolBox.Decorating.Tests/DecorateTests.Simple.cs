@@ -1,4 +1,4 @@
-namespace AlchemyLub.ToolBox.Decorating.UnitTests;
+namespace AlchemyLab.ToolBox.Decorating.UnitTests;
 
 /// <summary>
 /// Тесты для <see cref="ServiceCollectionExtensions.Decorate{TInterface,TDecorator}"/> при декорировании простых типов
@@ -40,9 +40,9 @@ public partial class DecorateTests
     {
         ServiceProvider serviceProvider = ConfigureProvider(services =>
         {
-            services.AddTransient<IService, Service>();
-            services.AddTransient<IService, AnotherService>();
-            services.Decorate<IService, ServiceDecorator>();
+            ServiceCollectionServiceExtensions.AddTransient<IService, Service>(services);
+            ServiceCollectionServiceExtensions.AddTransient<IService, AnotherService>(services);
+            ServiceCollectionExtensions.Decorate<IService, ServiceDecorator>(services);
         });
         IEnumerable<IService> services = serviceProvider.GetRequiredService<IEnumerable<IService>>();
 
@@ -60,8 +60,8 @@ public partial class DecorateTests
     {
         ServiceProvider serviceProvider = ConfigureProvider(services =>
         {
-            services.AddTransient<IService>(_ => new Service());
-            services.Decorate<IService, ServiceDecorator>();
+            ServiceCollectionServiceExtensions.AddTransient<IService>(services, _ => new Service());
+            ServiceCollectionExtensions.Decorate<IService, ServiceDecorator>(services);
         });
         IService service = serviceProvider.GetRequiredService<IService>();
 
@@ -180,19 +180,19 @@ public partial class DecorateTests
             services.Decorate<IMultiplyService, AnotherMultiplyServiceDecorator>();
         });
 
-        IEnumerable<IMultiplyService> services = serviceProvider.GetRequiredService<IEnumerable<IMultiplyService>>();
+        IMultiplyService[] services = [.. serviceProvider.GetRequiredService<IEnumerable<IMultiplyService>>()];
 
         // TODO: Сократить!
         Assert.All(
             services,
             service => Assert.IsType<AnotherMultiplyServiceDecorator>(service));
-        IEnumerable<IMultiplyService> anotherMultiplyServiceDecorators =
-            services.Select(t => ((AnotherMultiplyServiceDecorator)t).InnerService);
+        IMultiplyService[] anotherMultiplyServiceDecorators =
+            [.. services.Select(t => ((AnotherMultiplyServiceDecorator)t).InnerService)];
         Assert.All(
             anotherMultiplyServiceDecorators,
             service => Assert.IsType<MultiplyServiceDecorator>(service));
-        IEnumerable<IMultiplyService> multiplyServiceDecorators =
-            anotherMultiplyServiceDecorators.Select(t => ((MultiplyServiceDecorator)t).InnerService);
+        IMultiplyService[] multiplyServiceDecorators =
+            [.. anotherMultiplyServiceDecorators.Select(t => ((MultiplyServiceDecorator)t).InnerService)];
         Assert.Contains(multiplyServiceDecorators, t => t is AnotherMultiplyService);
         Assert.Contains(multiplyServiceDecorators, t => t is MultiplyService);
     }

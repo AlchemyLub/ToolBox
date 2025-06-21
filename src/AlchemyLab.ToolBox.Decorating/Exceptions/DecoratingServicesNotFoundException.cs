@@ -1,14 +1,14 @@
-namespace AlchemyLub.ToolBox.Decorating.Exceptions;
+namespace AlchemyLab.ToolBox.Decorating.Exceptions;
 
 /// <summary>
 /// Исключение, выбрасываемое при отсутствии зарегистрированных имплементаций сервиса
 /// </summary>
-internal class DecoratingServicesNotFoundException : Exception
+public class DecoratingServicesNotFoundException : Exception
 {
     /// <summary>
     /// Инициализирует новый экземпляр класса <see cref="DecoratingServicesNotFoundException"/>
     /// </summary>
-    internal DecoratingServicesNotFoundException(Type interfaceType)
+    public DecoratingServicesNotFoundException(Type interfaceType)
         : base($"Отсутствуют зарегистрированные имплементации интерфейса {interfaceType}")
     {
     }
@@ -25,7 +25,7 @@ internal class DecoratingServicesNotFoundException : Exception
 /// Исключение, выбрасываемое при отсутствии зарегистрированных имплементаций <typeparamref name="TInterface"/>
 /// </summary>
 /// <typeparam name="TInterface">Контракт декорируемого сервиса</typeparam>
-internal sealed class DecoratingServicesNotFoundException<TInterface> : DecoratingServicesNotFoundException
+public sealed class DecoratingServicesNotFoundException<TInterface> : DecoratingServicesNotFoundException
 {
     /// <summary>
     /// Инициализирует новый экземпляр класса <see cref="DecoratingServicesNotFoundException{TInterface}"/>
