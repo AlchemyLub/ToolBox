@@ -1,9 +1,9 @@
 name: Code Format Check
 on:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
-    branches: [main]
+    branches: [master, main]
 jobs:
   format:
     runs-on: ubuntu-latest

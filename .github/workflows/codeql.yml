@@ -1,12 +1,12 @@
 name: CodeQL Analysis
 on:
   push:
-    branches: [main]
+    branches: [master, main]
     paths:
     - '**.cs'
     - '**.csproj'
   pull_request:
-    branches: [main]
+    branches: [master, main]
     paths:
     - '**.cs'
     - '**.csproj'

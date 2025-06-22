@@ -9,7 +9,7 @@
             "include": [ "**/*.cs" ]
         },
         {
-            "name": "build",
+            "name": "simple-build",
             "group": "pre-push",
             "command": "dotnet",
             "args": [ "build" ]
