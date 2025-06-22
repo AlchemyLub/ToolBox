@@ -3,7 +3,35 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      day: "sunday"
+      time: "12:00"
+      interval: "daily"
+      timezone: "Europe/Moscow"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "actions"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    reviewers:
+      - "VladislavRudakoff"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      day: "sunday"
+      time: "12:00"
+      interval: "daily"
+      timezone: "Europe/Moscow"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    reviewers:
+      - "VladislavRudakoff"
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -11,8 +39,7 @@ updates:
       day: "sunday"
       time: "12:00"
       timezone: "Europe/Moscow"
-    open-pull-requests-limit: 10
-    versioning-strategy: auto
+    open-pull-requests-limit: 5
     labels:
       - "dependencies"
       - "nuget"
