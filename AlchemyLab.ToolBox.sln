@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Directory.Build.props = Directory.Build.props
 		LICENSE = LICENSE
+		.husky\pre-commit = .husky\pre-commit
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{92987ACC-7E45-4F26-99BD-C0536C242D5B}"
@@ -20,6 +21,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.AspNet", "src\AlchemyLab.ToolBox.AspNet\AlchemyLab.ToolBox.AspNet.csproj", "{5A5E452F-92B3-4F88-93BF-DD9B02432444}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.Decorating", "src\AlchemyLab.ToolBox.Decorating\AlchemyLab.ToolBox.Decorating.csproj", "{38931641-20F7-4068-A947-3FD7660DD5F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github", "Github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+		.github\dependabot.yml = .github\dependabot.yml
+		.github\workflows\format.yml = .github\workflows\format.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

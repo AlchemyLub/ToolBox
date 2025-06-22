@@ -12,12 +12,21 @@ public readonly struct ValueStopwatch
 
     private readonly long startTimestamp;
 
+    /// <summary>
+    /// Флаг отражающий активность таймера
+    /// </summary>
     public bool IsActive => startTimestamp is not 0;
 
     private ValueStopwatch(long startTimestamp) => this.startTimestamp = startTimestamp;
 
+    /// <summary>
+    /// Запустить новый таймер
+    /// </summary>
     public static ValueStopwatch StartNew() => new(Stopwatch.GetTimestamp());
 
+    /// <summary>
+    /// Получить информацию о только сколько прошло времени
+    /// </summary>
     public TimeSpan GetElapsedTime()
     {
         // Start timestamp can't be zero in an initialized ValueStopwatch. It would have to be literally the first thing executed when the machine boots to be 0.
