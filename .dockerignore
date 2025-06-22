@@ -12,7 +12,6 @@
 **/.git
 **/.gitattributes
 **/.gitignore
-**/.github
 
 # .NET
 **/bin/
