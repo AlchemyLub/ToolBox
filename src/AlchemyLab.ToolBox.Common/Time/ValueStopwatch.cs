@@ -1,4 +1,4 @@
-namespace AlchemyLab.ToolBox.Common;
+namespace AlchemyLab.ToolBox.Common.Time;
 
 /// <summary>
 /// Структура, аналогичная <see cref="Stopwatch"/> для избежания аллокаций

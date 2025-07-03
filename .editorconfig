@@ -16,7 +16,7 @@ dotnet_style_null_propagation = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
 dotnet_style_prefer_auto_properties = true:silent
 dotnet_style_object_initializer = true:suggestion
-dotnet_style_prefer_collection_expression = true:suggestion
+dotnet_style_prefer_collection_expression = true:silent
 dotnet_style_collection_initializer = true:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment = true:silent
@@ -184,6 +184,8 @@ csharp_style_prefer_query_over_loop = false:silent
 
 # Do not declare static members on generic types
 dotnet_diagnostic.CA1000.severity = suggestion
+# Do not expose generic lists
+dotnet_diagnostic.CA1002.severity = none
 # use the LoggerMessage delegates
 dotnet_diagnostic.CA1848.severity = none
 
@@ -259,6 +261,8 @@ dotnet_diagnostic.CA5394.severity = warning
 dotnet_diagnostic.IDE0007.severity = none
 # Use explicit type instead of 'var'
 dotnet_diagnostic.IDE0008.severity = warning
+# Use collection initializers or expressions
+dotnet_diagnostic.IDE0028.severity = suggestion
 # Using directives must be placed outside of a namespace declaration
 dotnet_diagnostic.IDE0065.severity = none
 # Use conditional expression for return
@@ -270,9 +274,13 @@ dotnet_diagnostic.IDE0290.severity = suggestion
 # Collection initialization can be simplified
 dotnet_diagnostic.IDE0305.severity = suggestion
 
+# Resharper
+
+resharper_loop_can_be_converted_to_query_highlighting = none
+
 # Microsoft.CodeAnalysis.CSharp
 
-dotnet_diagnostic.CS1591.severity = suggestion
+dotnet_diagnostic.CS1591.severity = warning
 
 # StyleCop.Analyzers
 
@@ -611,6 +619,9 @@ dotnet_diagnostic.CS8824.severity = error
 # Return value must be non-null because parameter is non-null
 dotnet_diagnostic.CS8825.severity = error
 
+# Assignment made to same variable; did you mean to assign something else?
+dotnet_diagnostic.CS1717.severity = warning
+
 # Sonar scaner
 
 dotnet_diagnostic.S1118.severity = suggestion
@@ -687,14 +698,14 @@ csharp_style_expression_bodied_lambdas = true:silent
 
 ### Settings for Asp.net
 
-# ASP0014: Suggest using top level route registrations
+# Suggest using top level route registrations
 dotnet_diagnostic.ASP0014.severity = suggestion
 
-[*Tests.cs]
-# Use local function instead of lambda
-dotnet_diagnostic.IDE0039.severity = none
+[**/tests/**/*Tests.cs]
+dotnet_analyzer_diagnostic.severity = silent
 
-dotnet_diagnostic.CS1591.severity = none
+[**/*.Database/**/*]
+dotnet_diagnostic.CS8618.severity = none
 
 [**/Migrations/**]
 generated_code = true

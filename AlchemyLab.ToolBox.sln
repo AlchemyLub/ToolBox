@@ -24,12 +24,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.AspNet",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlchemyLab.ToolBox.Decorating", "src\AlchemyLab.ToolBox.Decorating\AlchemyLab.ToolBox.Decorating.csproj", "{38931641-20F7-4068-A947-3FD7660DD5F1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github", "Github", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-	ProjectSection(SolutionItems) = preProject
-		.github\workflows\codeql.yml = .github\workflows\codeql.yml
-		.github\dependabot.yml = .github\dependabot.yml
-		.github\workflows\format.yml = .github\workflows\format.yml
-	EndProjectSection
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlchemyLab.ToolBox.Benchmarks.Common", "benchmarks\AlchemyLab.ToolBox.Benchmarks.Common\AlchemyLab.ToolBox.Benchmarks.Common.csproj", "{AE4EF080-D2B9-489F-B210-5D4F40CB408B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlchemyLab.ToolBox.Common.UnitTests", "tests\AlchemyLab.ToolBox.Common.UnitTests\AlchemyLab.ToolBox.Common.UnitTests.csproj", "{0572AD2B-9F31-4316-A747-343A6E728807}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,12 +52,22 @@ Global
 		{38931641-20F7-4068-A947-3FD7660DD5F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38931641-20F7-4068-A947-3FD7660DD5F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38931641-20F7-4068-A947-3FD7660DD5F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE4EF080-D2B9-489F-B210-5D4F40CB408B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE4EF080-D2B9-489F-B210-5D4F40CB408B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE4EF080-D2B9-489F-B210-5D4F40CB408B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE4EF080-D2B9-489F-B210-5D4F40CB408B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0572AD2B-9F31-4316-A747-343A6E728807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0572AD2B-9F31-4316-A747-343A6E728807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0572AD2B-9F31-4316-A747-343A6E728807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0572AD2B-9F31-4316-A747-343A6E728807}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6169B7BF-1A7C-43C3-9E6C-31B45D373A6F} = {92987ACC-7E45-4F26-99BD-C0536C242D5B}
+		{AE4EF080-D2B9-489F-B210-5D4F40CB408B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{0572AD2B-9F31-4316-A747-343A6E728807} = {92987ACC-7E45-4F26-99BD-C0536C242D5B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5C1A0EED-A679-4997-A266-F3A92E5D8C2D}

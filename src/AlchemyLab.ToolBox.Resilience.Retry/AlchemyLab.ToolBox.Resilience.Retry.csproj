@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\AlchemyLab.ToolBox.Resilience\AlchemyLab.ToolBox.Resilience.csproj" />
+  </ItemGroup>
+</Project>
