@@ -53,7 +53,7 @@ public static class EnumerableExtensions
         {
             if (collection.Count is 0)
             {
-                return ReadOnlySpan<T>.Empty;
+                return [];
             }
 
             T[] array = new T[collection.Count];
@@ -363,14 +363,7 @@ public static class EnumerableExtensions
         {
             ref TValue? valRef = ref CollectionsMarshal.GetValueRefOrAddDefault(result, kvp.Key, out bool exists);
 
-            if (exists && valRef is not null)
-            {
-                valRef = resolver(valRef, kvp.Value);
-            }
-            else
-            {
-                valRef = kvp.Value;
-            }
+            valRef = exists && valRef is not null ? resolver(valRef, kvp.Value) : kvp.Value;
         }
 
         return result;
