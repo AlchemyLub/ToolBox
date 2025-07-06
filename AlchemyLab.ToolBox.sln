@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlchemyLab.ToolBox.Benchmar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlchemyLab.ToolBox.Common.UnitTests", "tests\AlchemyLab.ToolBox.Common.UnitTests\AlchemyLab.ToolBox.Common.UnitTests.csproj", "{0572AD2B-9F31-4316-A747-343A6E728807}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlchemyLab.ToolBox.MigrationHost", "src\AlchemyLab.ToolBox.MigrationHost\AlchemyLab.ToolBox.MigrationHost.csproj", "{019C2407-849C-4033-9573-04B5C88A615C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +62,10 @@ Global
 		{0572AD2B-9F31-4316-A747-343A6E728807}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0572AD2B-9F31-4316-A747-343A6E728807}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0572AD2B-9F31-4316-A747-343A6E728807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{019C2407-849C-4033-9573-04B5C88A615C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{019C2407-849C-4033-9573-04B5C88A615C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{019C2407-849C-4033-9573-04B5C88A615C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{019C2407-849C-4033-9573-04B5C88A615C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
