@@ -1,0 +1,22 @@
+<Project>
+  <UsingTask TaskName="SettingsCodeGenTask" 
+             AssemblyFile="$(MSBuildThisFileDirectory)..\AlchemyLab.ToolBox.Settings.CodeGen.dll" />
+
+  <Target Name="GenerateSettingsKeys" BeforeTargets="BeforeBuild" 
+          Condition="'$(DesignTimeBuild)' != 'true' AND '$(SettingsCodeGenDisabled)' != 'true'">
+    
+    <PropertyGroup>
+      <SettingsNamespace Condition="'$(SettingsNamespace)' == ''">$(MSBuildProjectName).Generated</SettingsNamespace>
+      <SettingsClassName Condition="'$(SettingsClassName)' == ''">AppSettingsKeys</SettingsClassName>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <AppSettingsFiles Include="$(MSBuildProjectDirectory)\appsettings*.json" />
+    </ItemGroup>
+
+    <SettingsCodeGenTask ProjectDirectory="$(MSBuildProjectDirectory)" 
+                         NamespaceName="$(SettingsNamespace)" 
+                         ClassName="$(SettingsClassName)"
+                         Condition="'@(AppSettingsFiles)' != ''" />
+  </Target>
+</Project>

@@ -1,0 +1,15 @@
+<Project>
+
+  <PropertyGroup>
+    <CustomTasksFolder>$(MSBuildThisFileDirectory)..\tasks\net9.0</CustomTasksFolder>
+    <CustomTasksAssembly>$(CustomTasksFolder)\$(MSBuildThisFileName).dll</CustomTasksAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="SettingsCodeGenTask" AssemblyFile="$(CustomTasksAssembly)" />
+
+  <PropertyGroup>
+    <SettingsNamespace Condition="'$(SettingsNamespace)' == ''">$(MSBuildProjectName).Generated</SettingsNamespace>
+    <SettingsClassName Condition="'$(SettingsClassName)' == ''">AppSettingsKeys</SettingsClassName>
+  </PropertyGroup>
+
+</Project>
