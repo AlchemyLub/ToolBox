@@ -32,8 +32,8 @@ public class SettingsCodeGenTaskTests : IDisposable
         SettingsCodeGenTask task = new()
         {
             ProjectDirectory = testDirectory,
-            NamespaceName = "TestNamespace",
-            ClassName = "TestSettings",
+            SettingsNamespaceName = "TestNamespace",
+            SettingsClassName = "TestSettings",
             BuildEngine = buildEngine
         };
 
