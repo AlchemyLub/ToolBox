@@ -3,9 +3,8 @@ namespace AlchemyLab.ToolBox.Settings.CodeGen.Models;
 /// <summary>
 /// Ячейка для хранения настроек
 /// </summary>
-/// <param name="Name">Имя ячейки</param>
 /// <param name="FullPath">Полный путь</param>
-public record SettingsNode(string Name, string FullPath = "")
+public record SettingsNode(string FullPath = "")
 {
     /// <summary>
     /// Словарь для хранения значений настроек
@@ -16,6 +15,9 @@ public record SettingsNode(string Name, string FullPath = "")
     /// Словарь для хранения дочерних узлов настроек
     /// </summary>
     public Dictionary<string, SettingsNode> Children { get; } = new();
+
+    /// <summary>Полный путь</summary>
+    public string FullPath { get; } = FullPath;
 
     /// <summary>
     /// Получить или создать дочерний узел настроек
@@ -30,7 +32,7 @@ public record SettingsNode(string Name, string FullPath = "")
         }
 
         string childPath = string.IsNullOrEmpty(FullPath) ? originalName : $"{FullPath}:{originalName}";
-        Children[className] = new(className, childPath);
+        Children[className] = new(childPath);
         return Children[className];
     }
 

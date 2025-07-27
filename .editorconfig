@@ -261,6 +261,8 @@ dotnet_diagnostic.CA5394.severity = warning
 dotnet_diagnostic.IDE0007.severity = none
 # Use explicit type instead of 'var'
 dotnet_diagnostic.IDE0008.severity = warning
+# Add missing cases to switch statement
+dotnet_diagnostic.IDE0010.severity = none
 # Use collection initializers or expressions
 dotnet_diagnostic.IDE0028.severity = suggestion
 # Using directives must be placed outside of a namespace declaration

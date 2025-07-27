@@ -4,10 +4,11 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <SettingsCodeGenLocalization>ru</SettingsCodeGenLocalization>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Settings.CodeGen" Version="1.0.0-beta5">
+    <PackageReference Include="Settings.CodeGen" Version="1.0.0-rc16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

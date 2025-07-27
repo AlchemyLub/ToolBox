@@ -22,7 +22,7 @@ public class MockBuildEngine : IBuildEngine
     public int ColumnNumberOfTaskNode => 0;
 
     /// <inheritdoc />
-    public string ProjectFileOfTaskNode => string.Empty;
+    public string ProjectFileOfTaskNode => Environment.CurrentDirectory;
 
     /// <inheritdoc />
     public void LogErrorEvent(BuildErrorEventArgs e)

@@ -5,6 +5,9 @@ namespace AlchemyLab.ToolBox.Settings.CodeGen;
 /// </summary>
 public class SettingsCodeGenTask : Task
 {
+    private const string SettingsClassName = "AppSettingsKeys";
+    private const string SettingsFileName = $"{SettingsClassName}.appsettings.g.cs";
+
     private static readonly HashSet<string> ReservedWords =
     [
         "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked",
@@ -21,22 +24,36 @@ public class SettingsCodeGenTask : Task
     /// <summary>
     /// Путь к папке проекта с конфигами (если не указан, используется текущий проект)
     /// </summary>
-    public required string? SettingsProjectDir { get; set; }
+    public string? SettingsProjectDir { get; set; }
 
     /// <summary>
     /// Имя пространства имен для сгенерированного класса
     /// </summary>
-    public required string SettingsNamespaceName { get; set; } = "Generated";
+    public string SettingsNamespaceName { get; set; } = "Generated";
 
     /// <summary>
-    /// Имя класса для сгенерированного файла
+    /// Локализация
     /// </summary>
-    public required string SettingsClassName { get; set; } = "AppSettingsKeys";
+    public string? SettingsCodeGenLocalization { get; set; } = "en";
+
+    /// <summary>
+    /// Путь к выходной директории сборки.
+    /// Используется для хранения служебных файлов, таких как marker актуальности.
+    /// </summary>
+    [Required]
+    public string MarkerOutputPath { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Сгенерированный файл
+    /// </summary>
+    [Output]
+    public string GeneratedFileDir { get; set; } = string.Empty;
 
     /// <inheritdoc />
     public override bool Execute()
     {
-        SettingsProjectDir ??= Path.GetDirectoryName(BuildEngine.ProjectFileOfTaskNode);
+        SettingsProjectDir ??= Environment.CurrentDirectory;
+        GeneratedFileDir = Path.Combine(Environment.CurrentDirectory, "Generated");
 
         if (string.IsNullOrEmpty(SettingsProjectDir))
         {
@@ -50,6 +67,8 @@ public class SettingsCodeGenTask : Task
             return false;
         }
 
+        string language = SettingsCodeGenLocalization?.ToLowerInvariant() ?? "en";
+
         try
         {
             string[] settingsFiles = Directory.GetFiles(SettingsProjectDir, "appsettings*.json");
@@ -60,16 +79,17 @@ public class SettingsCodeGenTask : Task
                 return true;
             }
 
-            string outputDir = Path.Combine(SettingsProjectDir, "Generated");
-            string outputFile = Path.Combine(outputDir, $"{SettingsClassName}.g.cs");
+            string outputFile = Path.Combine(GeneratedFileDir, SettingsFileName);
 
-            if (!ShouldRegenerate(settingsFiles, outputFile))
+            CleanupGeneratedFiles(GeneratedFileDir, outputFile);
+
+            if (IsUpToDate(settingsFiles, outputFile, SettingsNamespaceName, language))
             {
-                Log.LogMessage(MessageImportance.Low, "Generated file is up to date, skipping generation");
+                Log.LogMessage(MessageImportance.Low, "Generated file is up to date, skipping generation.");
                 return true;
             }
 
-            SettingsNode root = new("Root");
+            SettingsNode root = new();
 
             foreach (string file in settingsFiles)
             {
@@ -81,7 +101,7 @@ public class SettingsCodeGenTask : Task
                         CommentHandling = JsonCommentHandling.Skip,
                         AllowTrailingCommas = true
                     };
-                    JsonDocument doc = JsonDocument.Parse(json, options);
+                    using JsonDocument doc = JsonDocument.Parse(json, options);
                     ProcessElement(doc.RootElement, root);
                     Log.LogMessage(MessageImportance.Low, $"Processed {Path.GetFileName(file)}");
                 }
@@ -91,12 +111,16 @@ public class SettingsCodeGenTask : Task
                 }
             }
 
-            string generatedClass = GenerateSettingsClass(root, SettingsNamespaceName, SettingsClassName);
+            string generatedClass = GenerateSettingsClass(root, SettingsNamespaceName, language);
 
-            Directory.CreateDirectory(outputDir);
+            Directory.CreateDirectory(GeneratedFileDir);
             File.WriteAllText(outputFile, generatedClass);
 
-            Log.LogMessage(MessageImportance.Normal, $"Generated {SettingsClassName}.g.cs");
+            File.SetLastWriteTimeUtc(outputFile, DateTime.UtcNow);
+
+            SaveUpToDateMarker(settingsFiles, SettingsNamespaceName, language);
+
+            Log.LogMessage(MessageImportance.Normal, $"Generated {SettingsFileName}");
             return true;
         }
         catch (Exception ex)
@@ -115,20 +139,16 @@ public class SettingsCodeGenTask : Task
             switch (property.Value.ValueKind)
             {
                 case JsonValueKind.Object:
-                {
                     SettingsNode child = parent.GetOrCreateChild(className, property.Name);
                     ProcessElement(property.Value, child);
                     break;
-                }
                 case JsonValueKind.Array:
-                {
                     for (int i = 0; i < property.Value.GetArrayLength(); i++)
                     {
                         parent.AddValue($"{className}_{i}", $"{property.Name}:{i}");
                     }
 
                     break;
-                }
                 default:
                     parent.AddValue(className, property.Name);
                     break;
@@ -136,59 +156,68 @@ public class SettingsCodeGenTask : Task
         }
     }
 
-    private static string GenerateSettingsClass(SettingsNode root, string namespaceName, string className)
+    private static string GenerateSettingsClass(SettingsNode root, string namespaceName, string language)
     {
         StringBuilder sb = new();
 
         sb.AppendLine("// <auto-generated />");
-        sb.AppendLine("// This file was generated by Settings.CodeGen");
         sb.AppendLine();
         sb.AppendLine($"namespace {namespaceName};");
         sb.AppendLine();
         sb.AppendLine("/// <summary>");
-        sb.AppendLine("/// Strongly-typed keys for application settings");
+        sb.AppendLine(CommentTemplates.ClassSummary(language));
         sb.AppendLine("/// </summary>");
-        sb.AppendLine($"public static class {className}");
+        sb.AppendLine($"""[System.CodeDom.Compiler.GeneratedCode("{nameof(SettingsCodeGenTask)}", "1.0.0")]""");
+        sb.AppendLine($"public static class {SettingsClassName}");
         sb.AppendLine("{");
-        GenerateNode(sb, root, 1);
+        GenerateNode(sb, root, 1, language);
         sb.AppendLine("}");
 
         return sb.ToString();
     }
 
-    private static void GenerateNode(StringBuilder sb, SettingsNode node, int indent)
+    private static void GenerateNode(StringBuilder sb, SettingsNode node, int indent, string language)
     {
         string indentStr = new(' ', indent * 4);
-
-        foreach (KeyValuePair<string, string> value in node.Values.OrderBy(x => x.Key))
-        {
-            sb.AppendLine($"{indentStr}/// <summary>");
-            sb.AppendLine($"{indentStr}/// Configuration key: {value.Value}");
-            sb.AppendLine($"{indentStr}/// </summary>");
-            sb.AppendLine($"{indentStr}public const string {value.Key} = \"{value.Value}\";");
-        }
+        bool isFirstElement = true;
 
         foreach (KeyValuePair<string, SettingsNode> child in node.Children.OrderBy(x => x.Key))
         {
-            if (node.Values.Any())
+            if (!isFirstElement)
             {
                 sb.AppendLine();
             }
 
             sb.AppendLine($"{indentStr}/// <summary>");
-            sb.AppendLine($"{indentStr}/// Configuration section: {child.Value.FullPath}");
+            sb.AppendLine($"{indentStr}/// {CommentTemplates.Section(child.Value.FullPath, language)}");
             sb.AppendLine($"{indentStr}/// </summary>");
             sb.AppendLine($"{indentStr}public static class {child.Key}");
             sb.AppendLine($"{indentStr}{{");
+            sb.AppendLine($"{indentStr}    /// <summary>");
+            sb.AppendLine($"{indentStr}    /// {CommentTemplates.SectionName(child.Key, language)}");
+            sb.AppendLine($"{indentStr}    /// </summary>");
             sb.AppendLine($"{indentStr}    public const string Section = \"{child.Value.FullPath}\";");
+            sb.AppendLine();
 
-            if (child.Value.Values.Any() || child.Value.Children.Any())
+            GenerateNode(sb, child.Value, indent + 1, language);
+            sb.AppendLine($"{indentStr}}}");
+
+            isFirstElement = false;
+        }
+
+        foreach (KeyValuePair<string, string> value in node.Values.OrderBy(x => x.Key))
+        {
+            if (!isFirstElement)
             {
                 sb.AppendLine();
             }
 
-            GenerateNode(sb, child.Value, indent + 1);
-            sb.AppendLine($"{indentStr}}}");
+            sb.AppendLine($"{indentStr}/// <summary>");
+            sb.AppendLine($"{indentStr}/// {CommentTemplates.Key(value.Value, language)}");
+            sb.AppendLine($"{indentStr}/// </summary>");
+            sb.AppendLine($"{indentStr}public const string {value.Key} = \"{value.Value}\";");
+
+            isFirstElement = false;
         }
     }
 
@@ -203,7 +232,7 @@ public class SettingsCodeGenTask : Task
             result = "_" + result;
         }
 
-        if (ReservedWords.Contains(result.ToLower()))
+        if (ReservedWords.Contains(result))
         {
             result = "@" + result;
         }
@@ -211,14 +240,129 @@ public class SettingsCodeGenTask : Task
         return result;
     }
 
-    private static bool ShouldRegenerate(string[] settingsFiles, string outputFile)
+    private bool IsUpToDate(string[] settingsFiles, string outputFile, string namespaceName, string language)
     {
+        string markerFilePath = GetMarkerFilePath(MarkerOutputPath);
+
         if (!File.Exists(outputFile))
         {
-            return true;
+            Log.LogMessage(MessageImportance.Low, "Output file does not exist, regeneration required.");
+            return false;
         }
 
-        DateTime outputTime = File.GetLastWriteTime(outputFile);
-        return settingsFiles.Any(f => File.GetLastWriteTime(f) > outputTime);
+        if (!File.Exists(markerFilePath))
+        {
+            Log.LogMessage(MessageImportance.Low, "Marker file does not exist, regeneration required.");
+            return false;
+        }
+
+        try
+        {
+            string savedState = File.ReadAllText(markerFilePath).Trim();
+            if (string.IsNullOrEmpty(savedState))
+            {
+                Log.LogMessage(MessageImportance.Low, "Marker file is empty or invalid, regeneration required.");
+                return false;
+            }
+
+            string currentState = CalculateInputHash(settingsFiles, namespaceName, language);
+
+            if (!string.Equals(currentState, savedState, StringComparison.Ordinal))
+            {
+                Log.LogMessage(MessageImportance.Low, "Input state changed, regeneration required.");
+                return false;
+            }
+
+            DateTime outputWriteTime = File.GetLastWriteTimeUtc(outputFile);
+            if (!settingsFiles.Any(t => File.GetLastWriteTimeUtc(t) > outputWriteTime))
+            {
+                return true;
+            }
+
+            Log.LogMessage(MessageImportance.Low, "Input file is newer than output, regeneration required.");
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Log.LogWarning($"Error during up-to-date check: {ex.Message}. Assuming regeneration is required.");
+            return false;
+        }
     }
+
+    private void SaveUpToDateMarker(string[] settingsFiles, string namespaceName, string language)
+    {
+        try
+        {
+            string markerFilePath = GetMarkerFilePath(MarkerOutputPath);
+
+            string currentState = CalculateInputHash(settingsFiles, namespaceName, language);
+            File.WriteAllText(markerFilePath, currentState);
+            Log.LogMessage(MessageImportance.Low, $"Saved up-to-date marker to: {markerFilePath}");
+        }
+        catch (Exception ex)
+        {
+            Log.LogWarning($"Failed to save up-to-date marker: {ex.Message}");
+        }
+    }
+
+    private static string CalculateInputHash(string[] files, string? settingNamespace, string? language)
+    {
+        using SHA256? sha256 = SHA256.Create();
+        StringBuilder sb = new();
+
+        foreach (string? file in files.OrderBy(f => f))
+        {
+            sb.Append(file);
+            sb.Append(File.GetLastWriteTimeUtc(file).Ticks.ToString(CultureInfo.InvariantCulture));
+        }
+
+        sb.Append(settingNamespace ?? string.Empty);
+        sb.Append(language ?? string.Empty);
+
+        byte[] inputBytes = Encoding.UTF8.GetBytes(sb.ToString());
+        byte[] hashBytes = sha256.ComputeHash(inputBytes);
+        return Convert.ToBase64String(hashBytes);
+    }
+
+    private void CleanupGeneratedFiles(string generatedDirectory, string currentOutputFile)
+    {
+        try
+        {
+            if (!Directory.Exists(generatedDirectory))
+            {
+                return;
+            }
+
+            string[] oldFiles = Directory.GetFiles(generatedDirectory, $"*{SettingsFileName}", SearchOption.TopDirectoryOnly);
+
+            foreach (string oldFile in oldFiles)
+            {
+                if (!string.Equals(oldFile, currentOutputFile, StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        File.Delete(oldFile);
+                        Log.LogMessage(MessageImportance.Low, $"Deleted stale generated file: {oldFile}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.LogWarning($"Failed to delete stale generated file '{oldFile}': {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Log.LogMessage(MessageImportance.Low, $"Skipped current output file during cleanup: {oldFile}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.LogWarning($"Error during cleanup of generated files in '{generatedDirectory}': {ex.Message}");
+        }
+    }
+
+    private static string GetMarkerFilePath(string markerOutputPath) =>
+        Environment.CurrentDirectory.EndsWith(markerOutputPath, StringComparison.OrdinalIgnoreCase)
+            ? Path.Combine(Environment.CurrentDirectory, "SettingsCodeGen.marker")
+            : Path.Combine(Environment.CurrentDirectory, markerOutputPath, "SettingsCodeGen.marker");
 }
